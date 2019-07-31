@@ -28,17 +28,69 @@
       var material2 = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
       var plane = new THREE.Mesh(geometry2, material2);
       scene.add(plane);
-
+      
+      cube.position.x = 0;
+      cube.position.y = 0;
+      cube.position.z = 1;
+      camera.position.x = cube.position.x;
+      camera.position.y = cube.position.y - 2;
+      camera.position.z = cube.position.z + 1;
       camera.rotation.x = 1;
-      camera.position.y = -7;
-      camera.position.z = 5;
+      
+      var moveForward = false;
+      var moveLeft = false;
+      var moveBackward = false;
+      var moveRight = false;
+
+      document.addEventListener( 'keydown', function(e) {
+        switch ( e.keyCode ) {
+          case 87: // w
+            moveForward = true;
+            break;
+          case 65: // a
+            moveLeft = true;
+            break;
+          case 83: // s
+            moveBackward = true;
+            break;
+          case 68: // d
+            moveRight = true;
+            break;
+        }
+      }, false );
+
+      document.addEventListener( 'keyup', function(e) {
+        switch ( e.keyCode ) {
+          case 87: // w
+            moveForward = false;
+            break;
+          case 65: // a
+            moveLeft = false;
+            break;
+          case 83: // s
+            moveBackward = false;
+            break;
+          case 68: // d
+            moveRight = false;
+            break;
+        }
+      }, false );
 
       var animate = function() {
         requestAnimationFrame(animate);
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
+        if(moveForward) {
+          cube.position.y += 0.1;
+          camera.position.y = cube.position.y - 2;
+        } else if(moveLeft) {
+          cube.position.x -= 0.1;
+          camera.position.x = cube.position.x;
+        } else if(moveBackward) {
+          cube.position.y -= 0.1;
+          camera.position.y = cube.position.y - 2;
+        } else if(moveRight) {
+          cube.position.x += 0.1;
+          camera.position.x = cube.position.x;
+        }
         renderer.render(scene, camera);
       }
 
